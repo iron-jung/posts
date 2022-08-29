@@ -14,13 +14,15 @@ import TweetEmbed from 'react-tweet-embed'
 import { NotionRenderer } from 'react-notion-x'
 
 // utils
-import { getBlockTitle, getPageProperty, formatDate } from 'notion-utils'
+import { getBlockTitle, getPageProperty } from 'notion-utils'
 import { mapPageUrl, getCanonicalPageUrl } from 'lib/map-page-url'
 import { mapImageUrl } from 'lib/map-image-url'
 import { searchNotion } from 'lib/search-notion'
 import { useDarkMode } from 'lib/use-dark-mode'
 import * as types from 'lib/types'
 import * as config from 'lib/config'
+import moment from 'moment'
+import 'moment/locale/ko'
 
 // components
 import { Loading } from './Loading'
@@ -28,6 +30,7 @@ import { Page404 } from './Page404'
 import { PageHead } from './PageHead'
 import { PageAside } from './PageAside'
 import { Footer } from './Footer'
+import { ReactUtterances } from './ReactUtterances'
 import { NotionPageHeader } from './NotionPageHeader'
 import { GitHubShareButton } from './GitHubShareButton'
 
@@ -106,14 +109,26 @@ const Tweet = ({ id }: { id: string }) => {
   return <TweetEmbed tweetId={id} />
 }
 
+moment().locale('ko')
 const propertyLastEditedTimeValue = (
   { block, pageHeader },
   defaultFn: () => React.ReactNode
 ) => {
   if (pageHeader && block?.last_edited_time) {
-    return `Last updated ${formatDate(block?.last_edited_time, {
-      month: 'long'
-    })}`
+    return `최근 수정일: ${moment(block?.last_edited_time).format('LLL')}`
+  }
+
+  return defaultFn()
+}
+
+const propertyCreatedTimeValue = (
+  { block, pageHeader },
+  defaultFn: () => React.ReactNode
+) => {
+  console.log(block, pageHeader)
+
+  if (pageHeader && block?.created_time) {
+    return `생성일: ${moment(block?.created_time).format('LLL')}`
   }
 
   return defaultFn()
@@ -127,9 +142,7 @@ const propertyDateValue = (
     const publishDate = data?.[0]?.[1]?.[0]?.[1]?.start_date
 
     if (publishDate) {
-      return `Published ${formatDate(publishDate, {
-        month: 'long'
-      })}`
+      return `게시일: ${moment(publishDate).format('LLL')}}`
     }
   }
 
@@ -169,7 +182,8 @@ export const NotionPage: React.FC<types.PageProps> = ({
       Header: NotionPageHeader,
       propertyLastEditedTimeValue,
       propertyTextValue,
-      propertyDateValue
+      propertyDateValue,
+      propertyCreatedTimeValue
     }),
     []
   )
@@ -217,13 +231,13 @@ export const NotionPage: React.FC<types.PageProps> = ({
 
   const title = getBlockTitle(block, recordMap) || site.name
 
-  console.log('notion page', {
-    isDev: config.isDev,
-    title,
-    pageId,
-    rootNotionPageId: site.rootNotionPageId,
-    recordMap
-  })
+  // console.log('notion page', {
+  //   isDev: config.isDev,
+  //   title,
+  //   pageId,
+  //   rootNotionPageId: site.rootNotionPageId,
+  //   recordMap
+  // })
 
   if (!config.isServer) {
     // add important objects to the window global for easy debugging
@@ -235,6 +249,20 @@ export const NotionPage: React.FC<types.PageProps> = ({
 
   const canonicalPageUrl =
     !config.isDev && getCanonicalPageUrl(site, recordMap)(pageId)
+
+  let comments: React.ReactNode = null
+
+  if (block.type === 'page' && block.parent_table === 'collection') {
+    comments = (
+      <ReactUtterances
+        repo='jungChulOh/oit-blog'
+        issueMap='issue-term'
+        issueTerm='title'
+        label='comment'
+        theme={isDarkMode ? 'github-dark' : 'github-light'}
+      />
+    )
+  }
 
   const socialImage = mapImageUrl(
     getPageProperty<string>('Social Image', block, recordMap) ||
@@ -283,6 +311,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
         mapImageUrl={mapImageUrl}
         searchNotion={config.isSearchEnabled ? searchNotion : null}
         pageAside={pageAside}
+        pageFooter={comments}
         footer={footer}
       />
 
