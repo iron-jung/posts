@@ -145,7 +145,7 @@ export default withOGImage<'query', 'id'>({
   },
   cacheControl: 'max-age=0, s-maxage=86400, stale-while-revalidate=3600',
   type: 'jpeg',
-  quality: 75,
+  quality: 50,
   dev: {
     inspectHtml: debugInspectHtml
   }
