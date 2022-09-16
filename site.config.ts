@@ -8,12 +8,12 @@ export default siteConfig({
   rootNotionSpaceId: null,
 
   // basic site info (required)
-  name: 'O.IT Blog',
-  domain: 'o-it.blog',
-  author: 'O.IT(JungChulOh)',
+  name: 'O-IT Blog',
+  domain: 'o-it.site',
+  author: 'O-IT(JungChulOh)',
 
   // open graph metadata (optional)
-  description: 'O.IT 블로그에 오신걸 환영합니다! 👋',
+  description: 'O-IT 블로그에 오신걸 환영합니다! 👋',
 
   // social usernames (optional)
   // twitter: 'transitive_bs',
