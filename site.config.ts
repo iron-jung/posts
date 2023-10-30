@@ -1,4 +1,5 @@
 import { siteConfig } from './lib/site-config'
+import { isSearchEnabled } from '@/lib/config'
 
 export default siteConfig({
   // the site's root Notion page (required)
@@ -10,7 +11,7 @@ export default siteConfig({
 
   // basic site info (required)
   name: 'Iron.J Posts',
-  domain: 'o-it.site',
+  domain: 'oit-blog-git-main-jungchuloh.vercel.app',
   author: 'Iron.J(JungChulOh)',
 
   // open graph metadata (optional)
@@ -42,23 +43,17 @@ export default siteConfig({
   // example:
   //
   // pageUrlOverrides: {
-  //   '/foo': '067dd719a912471ea9a3ac10710e7fdf',
-  //   '/bar': '0be6efce9daf42688f65c76b89f8eb27'
-  // }
+  //   '/About': '93e7c42bf317493383a916b3781fd2c7',
+  // },
   pageUrlOverrides: null,
 
   // whether to use the default notion navigation style or a custom one with links to
   // important pages
-  navigationStyle: 'custom'
-  // navigationStyle: 'custom',
-  // navigationLinks: [
-  //   {
-  //     title: 'About',
-  //     pageId: 'f1199d37579b41cbabfc0b5174f4256a'
-  //   },
-  //   {
-  //     title: 'Contact',
-  //     pageId: '6a29ebcb935a4f0689fe661ab5f3b8d1'
-  //   }
-  // ]
+  navigationStyle: 'custom',
+  navigationLinks: [
+    {
+      title: 'About',
+      pageId: '93e7c42bf317493383a916b3781fd2c7'
+    }
+  ]
 })
