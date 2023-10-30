@@ -1,5 +1,4 @@
 import { siteConfig } from './lib/site-config'
-import { isSearchEnabled } from '@/lib/config'
 
 export default siteConfig({
   // the site's root Notion page (required)
@@ -11,7 +10,7 @@ export default siteConfig({
 
   // basic site info (required)
   name: 'Iron.J Posts',
-  domain: 'oit-blog-git-main-jungchuloh.vercel.app',
+  domain: 'posts.iron-j.xyz',
   author: 'Iron.J(JungChulOh)',
 
   // open graph metadata (optional)
